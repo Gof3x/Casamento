@@ -147,12 +147,12 @@ export const OrcamentoCasamentoPage: React.FC = () => {
       </div>
 
       {/* Category Tabs */}
-      <div className="flex overflow-x-auto gap-2 pb-3 px-4 sm:px-0 mt-6">
+      <div className="flex gap-2 flex-wrap pb-3 px-4 sm:px-0 mt-6">
         {dados.categorias.map((cat) => (
           <button
             key={cat.nome}
             onClick={() => setCategoriaAtiva(cat.nome)}
-            className={`px-3 sm:px-4 py-2 rounded-lg whitespace-nowrap font-medium transition-all text-sm sm:text-base ${
+            className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-all text-sm sm:text-base ${
               categoriaAtiva === cat.nome
                 ? 'bg-rose-500 text-white shadow-md'
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'

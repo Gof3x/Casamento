@@ -204,12 +204,12 @@ export const ConvidadosPage: React.FC = () => {
       {/* Filters and Add */}
       <Card>
         <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
-          <div className="flex gap-2 overflow-x-auto flex-1">
+          <div className="flex gap-2 flex-wrap flex-1">
             {(['todos', 'sim', 'nao', 'talvez'] as const).map((opcao) => (
               <button
                 key={opcao}
                 onClick={() => setFiltro(opcao === 'todos' ? 'todos' : opcao)}
-                className={`px-4 py-2 rounded-lg whitespace-nowrap font-medium transition-all ${
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${
                   filtro === opcao
                     ? 'bg-rose-500 text-white shadow-md'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
