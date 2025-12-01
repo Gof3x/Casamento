@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forçar Atualização - Nosso Casamento & Lar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFF1F3 0%, #FFE8F0 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(217, 3, 104, 0.15);
+            max-width: 500px;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            color: #D90368;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin: 5px 0 20px 0;
+        }
+        
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin: 20px 0;
+            font-size: 15px;
+        }
+        
+        .emoji {
+            font-size: 48px;
+            margin: 20px 0;
+            display: block;
+        }
+        
+        .info-box {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #D90368;
+        }
+        
+        .old-value {
+            font-size: 14px;
+            color: #999;
+            text-decoration: line-through;
+            margin: 5px 0;
+        }
+        
+        .new-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #D90368;
+            margin: 10px 0;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-direction: column;
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #D90368 0%, #F4A7B9 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        .button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(217, 3, 104, 0.3);
+        }
+        
+        .button:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+        
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .button.secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .button.secondary:hover:not(:disabled) {
+            background: #e0e0e0;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .status.success {
+            background: #E8F5E9;
+            color: #2E7D32;
+            display: block;
+        }
+        
+        .status.error {
+            background: #FFEBEE;
+            color: #C62828;
+            display: block;
+        }
+        
+        .status.loading {
+            background: #E3F2FD;
+            color: #1565C0;
+            display: block;
+        }
+        
+        .spinner {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #D90368;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="emoji">🔄</span>
+        <h1>Forçar Atualização</h1>
+        <p class="subtitle">Limpar cache e recarregar com novos valores</p>
+        
+        <div class="info-box">
+            <p style="margin: 0;">Orçamento Anterior:</p>
+            <div class="old-value">R$ 45.000,00</div>
+            <p style="margin: 10px 0 0 0;">Novo Orçamento:</p>
+            <div class="new-value">R$ 80.000,00</div>
+        </div>
+        
+        <p style="font-size: 13px; color: #999;">
+            Este processo vai limpar todos os dados armazenados e recarregar com os valores atualizados
+        </p>
+        
+        <div class="button-group">
+            <button class="button" onclick="forcarAtualizacao()">
+                ✨ Forçar Atualização Completa
+            </button>
+            <button class="button secondary" onclick="irPraOrcamento()">
+                ← Ir direto para Orçamento
+            </button>
+        </div>
+        
+        <div id="status" class="status"></div>
+        
+        <a href="http://localhost:5173/" class="link">
+            Voltar para Home
+        </a>
+    </div>
+
+    <script>
+        function exibirStatus(mensagem, tipo = 'loading') {
+            const status = document.getElementById('status');
+            status.className = `status ${tipo}`;
+            status.textContent = mensagem;
+        }
+
+        function forcarAtualizacao() {
+            exibirStatus('⏳ Iniciando limpeza completa...');
+            const button = document.querySelector('.button');
+            button.disabled = true;
+            
+            setTimeout(() => {
+                try {
+                    // PASSO 1: Limpar TODO o localStorage
+                    console.log('Limpando localStorage...');
+                    const chaves = Object.keys(localStorage);
+                    console.log('Chaves encontradas:', chaves);
+                    chaves.forEach(chave => {
+                        localStorage.removeItem(chave);
+                        console.log(`Removido: ${chave}`);
+                    });
+                    
+                    // PASSO 2: Limpar sessionStorage também
+                    console.log('Limpando sessionStorage...');
+                    sessionStorage.clear();
+                    
+                    // PASSO 3: Limpar IndexedDB (se existir)
+                    console.log('Limpando IndexedDB...');
+                    if (window.indexedDB) {
+                        try {
+                            const dbs = indexedDB.databases ? indexedDB.databases() : [];
+                            if (dbs && dbs.length > 0) {
+                                for (const db of dbs) {
+                                    indexedDB.deleteDatabase(db.name);
+                                }
+                            }
+                        } catch (e) {
+                            console.log('IndexedDB não disponível');
+                        }
+                    }
+                    
+                    exibirStatus('✅ Cache limpo com sucesso! Redirecionando...', 'success');
+                    
+                    // PASSO 4: Redirecionar para a página
+                    setTimeout(() => {
+                        // Redireciona SEM cache
+                        window.location.href = 'http://localhost:5173/orcamento-casamento?nocache=' + new Date().getTime();
+                    }, 1500);
+                    
+                } catch (error) {
+                    console.error('Erro:', error);
+                    exibirStatus('❌ Erro ao limpar: ' + error.message, 'error');
+                    button.disabled = false;
+                }
+            }, 1000);
+        }
+
+        function irPraOrcamento() {
+            const button = document.querySelectorAll('.button')[1];
+            button.disabled = true;
+            
+            exibirStatus('🔄 Carregando página de orçamento...', 'loading');
+            
+            setTimeout(() => {
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = 'http://localhost:5173/orcamento-casamento?t=' + new Date().getTime();
+            }, 500);
+        }
+
+        // Debug no console
+        console.log('🔍 DEBUG INFO:');
+        console.log('localStorage:', localStorage);
+        console.log('sessionStorage:', sessionStorage);
+        console.log('location:', window.location.href);
+    </script>
+</body>
+</html>

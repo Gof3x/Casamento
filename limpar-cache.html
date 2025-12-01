@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpar Cache - Nosso Casamento & Lar</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFF1F3 0%, #FFE8F0 100%);
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(217, 3, 104, 0.15);
+            max-width: 500px;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            color: #D90368;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
+        
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        
+        .heart {
+            font-size: 48px;
+            margin: 20px 0;
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #D90368 0%, #F4A7B9 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(217, 3, 104, 0.3);
+        }
+        
+        .button:active {
+            transform: scale(0.98);
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .status.success {
+            background: #E8F5E9;
+            color: #2E7D32;
+            display: block;
+        }
+        
+        .status.loading {
+            background: #E3F2FD;
+            color: #1565C0;
+            display: block;
+        }
+        
+        .names {
+            font-size: 24px;
+            font-weight: 700;
+            color: #D90368;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="heart">💍</div>
+        <h1>Atualizar Dados</h1>
+        <p>Clique no botão abaixo para limpar o cache e carregar os dados mais recentes:</p>
+        
+        <div class="names">
+            José Ítalo ♥ Ana Luiza
+        </div>
+        
+        <p style="font-size: 14px; color: #999;">
+            Isso vai remover os dados antigos e carregar os nomes atualizados
+        </p>
+        
+        <button class="button" onclick="limparCache()">
+            🔄 Limpar Cache e Atualizar
+        </button>
+        
+        <div id="status" class="status"></div>
+        
+        <a href="http://localhost:5173/" style="
+            display: inline-block;
+            margin-top: 20px;
+            color: #D90368;
+            text-decoration: none;
+            font-size: 14px;
+        ">
+            ← Voltar para a aplicação
+        </a>
+    </div>
+
+    <script>
+        function limparCache() {
+            const status = document.getElementById('status');
+            const button = document.querySelector('.button');
+            
+            // Mostrar status de carregamento
+            status.classList.add('loading');
+            status.classList.remove('success');
+            status.textContent = '⏳ Limpando cache...';
+            button.disabled = true;
+            
+            // Limpar localStorage
+            setTimeout(() => {
+                try {
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    
+                    // Mostrar sucesso
+                    status.classList.remove('loading');
+                    status.classList.add('success');
+                    status.textContent = '✅ Cache limpo com sucesso!';
+                    
+                    // Redirecionar após 2 segundos
+                    setTimeout(() => {
+                        window.location.href = 'http://localhost:5173/';
+                    }, 2000);
+                } catch (error) {
+                    status.classList.remove('loading');
+                    status.classList.add('success');
+                    status.textContent = '✅ Redirecionando...';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'http://localhost:5173/';
+                    }, 1000);
+                }
+            }, 500);
+        }
+    </script>
+</body>
+</html>

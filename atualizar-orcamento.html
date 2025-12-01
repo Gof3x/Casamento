@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Orçamento - Nosso Casamento & Lar</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFF1F3 0%, #FFE8F0 100%);
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(217, 3, 104, 0.15);
+            max-width: 500px;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            color: #D90368;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
+        
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+        
+        .emoji {
+            font-size: 48px;
+            margin: 20px 0;
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #D90368 0%, #F4A7B9 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(217, 3, 104, 0.3);
+        }
+        
+        .button:active {
+            transform: scale(0.98);
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .status.success {
+            background: #E8F5E9;
+            color: #2E7D32;
+            display: block;
+        }
+        
+        .status.loading {
+            background: #E3F2FD;
+            color: #1565C0;
+            display: block;
+        }
+        
+        .orcamento {
+            font-size: 32px;
+            font-weight: 700;
+            color: #D90368;
+            margin: 15px 0;
+        }
+        
+        .old-value {
+            font-size: 14px;
+            color: #999;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="emoji">💰</div>
+        <h1>Atualizar Orçamento</h1>
+        <p>Seu orçamento foi alterado no código!</p>
+        
+        <div class="old-value">Orçamento anterior: R$ 45.000,00</div>
+        <div class="orcamento">R$ 80.000,00</div>
+        
+        <p style="font-size: 14px; color: #999;">
+            Clique abaixo para atualizar a aplicação com o novo valor
+        </p>
+        
+        <button class="button" onclick="atualizarOrcamento()">
+            ✨ Atualizar Orçamento
+        </button>
+        
+        <div id="status" class="status"></div>
+        
+        <a href="http://localhost:5173/orcamento-casamento" style="
+            display: inline-block;
+            margin-top: 20px;
+            color: #D90368;
+            text-decoration: none;
+            font-size: 14px;
+        ">
+            ← Voltar para Orçamento
+        </a>
+    </div>
+
+    <script>
+        function atualizarOrcamento() {
+            const status = document.getElementById('status');
+            const button = document.querySelector('.button');
+            
+            // Mostrar status de carregamento
+            status.classList.add('loading');
+            status.classList.remove('success');
+            status.textContent = '⏳ Atualizando...';
+            button.disabled = true;
+            
+            // Limpar dados antigos e atualizar
+            setTimeout(() => {
+                try {
+                    // Limpar chaves antigas
+                    localStorage.removeItem('casamento-store');
+                    localStorage.removeItem('casamento-store-v1');
+                    
+                    // Se existir a v2, remover também para forçar reload com novos dados
+                    const casamentoV2 = localStorage.getItem('casamento-store-v2');
+                    if (casamentoV2) {
+                        localStorage.removeItem('casamento-store-v2');
+                    }
+                    
+                    // Mostrar sucesso
+                    status.classList.remove('loading');
+                    status.classList.add('success');
+                    status.textContent = '✅ Orçamento atualizado! Redirecionando...';
+                    
+                    // Redirecionar após 2 segundos
+                    setTimeout(() => {
+                        window.location.href = 'http://localhost:5173/orcamento-casamento';
+                    }, 2000);
+                } catch (error) {
+                    status.classList.remove('loading');
+                    status.classList.add('success');
+                    status.textContent = '✅ Redirecionando...';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'http://localhost:5173/orcamento-casamento';
+                    }, 1000);
+                }
+            }, 800);
+        }
+    </script>
+</body>
+</html>

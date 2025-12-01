@@ -1,0 +1,106 @@
+# ⚡ QUICK START - LISTA DE CONVIDADOS
+
+## 🚀 Para Começar Agora
+
+Abra seu navegador em: **http://localhost:5173/convidados**
+
+---
+
+## 👥 Dois Lados
+
+```
+💍 NOIVO          💐 NOIVA
+(até 200)         (até 200)
+```
+
+Clique em qualquer um para alternar.
+
+---
+
+## ➕ Adicionar Convidado
+
+1. Selecione o lado (💍 ou 💐)
+2. Clique em **"+ Adicionar"**
+3. Preencha os dados
+4. Clique em **"Salvar"**
+5. ✅ Pronto!
+
+---
+
+## ⚠️ Limite Atingido?
+
+Quando atinge 200 convidados:
+- ❌ Botão "Adicionar" desabilita
+- 📢 Mensagem de erro aparece
+- 💡 Delete algum convidado para adicionar outro
+
+---
+
+## 📊 Barra de Progresso
+
+```
+[████████░░░░░░░░] 50%
+100 / 200
+```
+
+- 🟢 Verde: < 80%
+- 🟡 Amarelo: 80-99%
+- 🔴 Vermelho: 100%
+
+---
+
+## 🔍 Filtros
+
+- **Todos** - Mostra todos
+- **✅ Confirmados** - Apenas confirmou
+- **❓ Talvez** - Ainda não decidiu
+- **❌ Recusados** - Recusou
+
+Funcionam por lado independentemente.
+
+---
+
+## ✏️ Editar
+
+Clique em ✏️ (lápis) para editar um convidado.
+
+---
+
+## 🗑️ Deletar
+
+Clique em 🗑️ (lixeira) para remover um convidado.
+
+---
+
+## 📍 Dados Salvos
+
+Seus dados são salvos automaticamente no navegador.  
+Eles permanecerão mesmo após recarregar ou fechar.
+
+---
+
+## 📈 Vejo Meus Totais Onde?
+
+Na página de Convidados, você verá cards com:
+- **Total**: Quantidade de convidados
+- **Confirmados**: ✅
+- **Talvez**: ❓
+- **Recusados**: ❌
+- **Total de Pessoas**: Convidados + acompanhantes
+
+---
+
+## 💡 Dica
+
+Você pode adicionar acompanhantes para cada convidado!  
+Ex: 1 convidado + 2 acompanhantes = 3 pessoas
+
+---
+
+## ❓ Mais Detalhes?
+
+Leia: **GUIA_CONVIDADOS.md**
+
+---
+
+**Divirta-se organizando! 💍💐**
