@@ -92,24 +92,38 @@ export interface DadosIdeias {
 export type ConfirmacaoConvidado = 'sim' | 'nao' | 'talvez';
 export type RestricaoAlimentar = 'vegetariano' | 'vegano' | 'gluten-free' | 'lactose-free' | 'nenhuma';
 export type LadoConvidado = 'noivo' | 'noiva';
+export type GrauParentesco = 'pais' | 'avos' | 'irmaos' | 'tios' | 'primos' | 'sogra' | 'cunhado' | 'outro';
 
 export interface Convidado {
   id: string;
   nome: string;
-  email?: string;
-  telefone?: string;
+  telefone: string;
   confirmacao: ConfirmacaoConvidado;
-  acompanhantes: number;
-  restricoesAlimentares: RestricaoAlimentar[];
-  observacoes?: string;
+  ehFamilia: boolean;
+  grauParentesco?: GrauParentesco;
+  lado: LadoConvidado;
+  ehPadrinho?: boolean;
+}
+
+export interface Padrinho {
+  id: string;
+  nome: string;
+  telefone: string;
+  confirmacao: ConfirmacaoConvidado;
+  ehCasal: boolean;
+  nomeParceiro?: string;
+  telefoneParceiro?: string;
   lado: LadoConvidado;
 }
 
 export interface DadosConvidados {
   convidados: Convidado[];
+  padrinhos: Padrinho[];
   totalConfirmados: number;
   totalTalvez: number;
   totalRecusados: number;
   convidadosNoivo: number;
   convidadosNoiva: number;
+  padrinhosNoivoQuantidade: number;
+  padrinhosNoivaQuantidade: number;
 }

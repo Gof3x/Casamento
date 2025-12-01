@@ -1,67 +1,51 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { DadosConvidados, Convidado, ConfirmacaoConvidado, LadoConvidado } from '@/types';
+import { DadosConvidados, Convidado, Padrinho, ConfirmacaoConvidado, LadoConvidado } from '@/types';
 
 const LIMITE_CONVIDADOS_POR_LADO = 100;
+const LIMITE_PADRINHOS_POR_LADO = 4; // 4 casais = 8 pessoas por lado
 
 interface ConvidadosStore {
   dados: DadosConvidados;
-  adicionarConvidado: (convidado: Omit<Convidado, 'id' | 'lado'> & { lado: LadoConvidado }, lado: LadoConvidado) => { sucesso: boolean; mensagem?: string };
+  adicionarConvidado: (convidado: Omit<Convidado, 'id'>, lado: LadoConvidado) => { sucesso: boolean; mensagem?: string };
   atualizarConvidado: (id: string, convidado: Partial<Convidado>) => void;
   deletarConvidado: (id: string) => void;
+  adicionarPadrinho: (padrinho: Omit<Padrinho, 'id'>) => { sucesso: boolean; mensagem?: string };
+  atualizarPadrinho: (id: string, padrinho: Partial<Padrinho>) => void;
+  deletarPadrinho: (id: string) => void;
   atualizarConfirmacao: (id: string, confirmacao: ConfirmacaoConvidado) => void;
+  atualizarConfirmacaoPadrinho: (id: string, confirmacao: ConfirmacaoConvidado) => void;
   calcularTotais: () => void;
-  getTotalAcompanhantes: () => number;
   getTotalConvidados: () => number;
   getConvidadosPorLado: (lado: LadoConvidado) => Convidado[];
+  getPadrinhoPorLado: (lado: LadoConvidado) => Padrinho[];
 }
 
 export const useConvidadosStore = create<ConvidadosStore>()(
   persist(
     (set, get) => ({
       dados: {
-        convidados: [
-          {
-            id: '1',
-            nome: 'Ana Silva',
-            email: 'ana@email.com',
-            telefone: '11999999999',
-            confirmacao: 'sim',
-            acompanhantes: 1,
-            restricoesAlimentares: ['vegetariano'],
-            lado: 'noivo',
-          },
-          {
-            id: '2',
-            nome: 'Carlos Santos',
-            email: 'carlos@email.com',
-            confirmacao: 'talvez',
-            acompanhantes: 0,
-            restricoesAlimentares: [],
-            lado: 'noiva',
-          },
-          {
-            id: '3',
-            nome: 'Maria Oliveira',
-            telefone: '11988888888',
-            confirmacao: 'nao',
-            acompanhantes: 0,
-            restricoesAlimentares: [],
-            lado: 'noivo',
-          },
-        ],
-        totalConfirmados: 2,
-        totalTalvez: 1,
+        convidados: [],
+        padrinhos: [],
+        totalConfirmados: 0,
+        totalTalvez: 0,
         totalRecusados: 0,
-        convidadosNoivo: 2,
-        convidadosNoiva: 1,
+        convidadosNoivo: 0,
+        convidadosNoiva: 0,
+        padrinhosNoivoQuantidade: 0,
+        padrinhosNoivaQuantidade: 0,
       },
 
-      adicionarConvidado: (convidado: Omit<Convidado, 'id' | 'lado'> & { lado: LadoConvidado }, lado: LadoConvidado) => {
+      adicionarConvidado: (convidado: Omit<Convidado, 'id'>, lado: LadoConvidado) => {
         const state = get();
         const convidadosPorLado = state.dados.convidados.filter((c) => c.lado === lado).length;
+        const padrinhosEmEsseLado = state.dados.padrinhos
+          .filter((p) => p.lado === lado)
+          .reduce((total, p) => total + (p.ehCasal ? 2 : 1), 0);
+        
+        const totalEmEsseLado = convidadosPorLado + padrinhosEmEsseLado;
 
-        if (convidadosPorLado >= LIMITE_CONVIDADOS_POR_LADO) {
+        if (totalEmEsseLado >= LIMITE_CONVIDADOS_POR_LADO) {
           return {
             sucesso: false,
             mensagem: `Limite de ${LIMITE_CONVIDADOS_POR_LADO} convidados atingido para a lista do ${lado === 'noivo' ? 'noivo' : 'noiva'}`,
@@ -72,7 +56,7 @@ export const useConvidadosStore = create<ConvidadosStore>()(
         set((state) => ({
           dados: {
             ...state.dados,
-            convidados: [...state.dados.convidados, { ...convidado, id }],
+            convidados: [...state.dados.convidados, { ...convidado, id, lado }],
           },
         }));
         get().calcularTotais();
@@ -99,12 +83,66 @@ export const useConvidadosStore = create<ConvidadosStore>()(
         get().calcularTotais();
       },
 
+      adicionarPadrinho: (padrinho: Omit<Padrinho, 'id'>) => {
+        const state = get();
+        const padrinhosEmEsseLado = state.dados.padrinhos.filter((p) => p.lado === padrinho.lado).length;
+
+        if (padrinhosEmEsseLado >= LIMITE_PADRINHOS_POR_LADO) {
+          return {
+            sucesso: false,
+            mensagem: `Limite de ${LIMITE_PADRINHOS_POR_LADO} casais de padrinhos atingido para o ${padrinho.lado === 'noivo' ? 'noivo' : 'noiva'}`,
+          };
+        }
+
+        const id = crypto.randomUUID();
+        set((state) => ({
+          dados: {
+            ...state.dados,
+            padrinhos: [...state.dados.padrinhos, { ...padrinho, id }],
+          },
+        }));
+        get().calcularTotais();
+        return { sucesso: true };
+      },
+
+      atualizarPadrinho: (id: string, padrinho: Partial<Padrinho>) => {
+        set((state) => ({
+          dados: {
+            ...state.dados,
+            padrinhos: state.dados.padrinhos.map((p) => (p.id === id ? { ...p, ...padrinho } : p)),
+          },
+        }));
+        get().calcularTotais();
+      },
+
+      deletarPadrinho: (id: string) => {
+        set((state) => ({
+          dados: {
+            ...state.dados,
+            padrinhos: state.dados.padrinhos.filter((p) => p.id !== id),
+          },
+        }));
+        get().calcularTotais();
+      },
+
       atualizarConfirmacao: (id: string, confirmacao: ConfirmacaoConvidado) => {
         set((state) => ({
           dados: {
             ...state.dados,
             convidados: state.dados.convidados.map((c) =>
               c.id === id ? { ...c, confirmacao } : c
+            ),
+          },
+        }));
+        get().calcularTotais();
+      },
+
+      atualizarConfirmacaoPadrinho: (id: string, confirmacao: ConfirmacaoConvidado) => {
+        set((state) => ({
+          dados: {
+            ...state.dados,
+            padrinhos: state.dados.padrinhos.map((p) =>
+              p.id === id ? { ...p, confirmacao } : p
             ),
           },
         }));
@@ -118,6 +156,8 @@ export const useConvidadosStore = create<ConvidadosStore>()(
         const recusados = state.dados.convidados.filter((c) => c.confirmacao === 'nao').length;
         const convidadosNoivo = state.dados.convidados.filter((c) => c.lado === 'noivo').length;
         const convidadosNoiva = state.dados.convidados.filter((c) => c.lado === 'noiva').length;
+        const padrinhosNoivoQuantidade = state.dados.padrinhos.filter((p) => p.lado === 'noivo').length;
+        const padrinhosNoivaQuantidade = state.dados.padrinhos.filter((p) => p.lado === 'noiva').length;
 
         set((state) => ({
           dados: {
@@ -127,13 +167,10 @@ export const useConvidadosStore = create<ConvidadosStore>()(
             totalRecusados: recusados,
             convidadosNoivo,
             convidadosNoiva,
+            padrinhosNoivoQuantidade,
+            padrinhosNoivaQuantidade,
           },
         }));
-      },
-
-      getTotalAcompanhantes: () => {
-        const state = get();
-        return state.dados.convidados.reduce((total, c) => total + c.acompanhantes, 0);
       },
 
       getTotalConvidados: () => {
@@ -145,9 +182,14 @@ export const useConvidadosStore = create<ConvidadosStore>()(
         const state = get();
         return state.dados.convidados.filter((c) => c.lado === lado);
       },
+
+      getPadrinhoPorLado: (lado: LadoConvidado) => {
+        const state = get();
+        return state.dados.padrinhos.filter((p) => p.lado === lado);
+      },
     }),
     {
-      name: 'convidados-store-v2',
+      name: 'convidados-store-v3',
     }
   )
 );
