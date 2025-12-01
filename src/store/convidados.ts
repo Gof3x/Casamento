@@ -190,6 +190,13 @@ export const useConvidadosStore = create<ConvidadosStore>()(
     }),
     {
       name: 'convidados-store-v3',
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.error('Erro ao carregar dados do localStorage:', error);
+        } else if (state) {
+          console.log('✅ Dados carregados do localStorage com sucesso');
+        }
+      },
     }
   )
 );
