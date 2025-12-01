@@ -95,8 +95,8 @@ export const ConvidadosPage: React.FC = () => {
   };
 
   const handleSalvarConvidado = () => {
-    if (!formConvidado.nome || !formConvidado.telefone) {
-      alert('Preencha todos os campos obrigatórios');
+    if (!formConvidado.nome) {
+      alert('Nome é obrigatório');
       return;
     }
 
@@ -111,8 +111,8 @@ export const ConvidadosPage: React.FC = () => {
   };
 
   const handleSalvarPadrinho = () => {
-    if (!formPadrinho.nome || !formPadrinho.telefone) {
-      alert('Preencha todos os campos obrigatórios');
+    if (!formPadrinho.nome) {
+      alert('Nome é obrigatório');
       return;
     }
 
@@ -367,7 +367,7 @@ export const ConvidadosPage: React.FC = () => {
             />
 
             <Input
-              label="Telefone *"
+              label="Telefone"
               value={formConvidado.telefone}
               onChange={e => setFormConvidado({ ...formConvidado, telefone: e.target.value })}
               placeholder="(11) 99999-9999"
@@ -435,7 +435,7 @@ export const ConvidadosPage: React.FC = () => {
             />
 
             <Input
-              label="Telefone *"
+              label="Telefone"
               value={formPadrinho.telefone}
               onChange={e => setFormPadrinho({ ...formPadrinho, telefone: e.target.value })}
               placeholder="(11) 99999-9999"
@@ -471,7 +471,7 @@ export const ConvidadosPage: React.FC = () => {
                 />
 
                 <Input
-                  label="Telefone do Parceiro *"
+                  label="Telefone do Parceiro"
                   value={formPadrinho.telefoneParceiro || ''}
                   onChange={e => setFormPadrinho({ ...formPadrinho, telefoneParceiro: e.target.value })}
                   placeholder="(11) 99999-9999"
